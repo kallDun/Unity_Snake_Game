@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class FruitScript : MonoBehaviour
+public class FruitController : MonoBehaviour
 {
     public Sprite fruit_1, fruit_2, fruit_3;
     public ParticleSystem particleSys;
@@ -12,7 +12,7 @@ public class FruitScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<SnakePieceScript>() is not null)
+        if (collision.gameObject.GetComponent<SnakePiece>() is not null)
         {
             OnEating?.Invoke();            
         }        

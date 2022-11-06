@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEngine;
 using static Direction;
 
-public class SnakePieceScript : MonoBehaviour
+public class SnakePiece : MonoBehaviour
 {
     // sprites
     public Sprite HeadRight;
@@ -20,7 +20,7 @@ public class SnakePieceScript : MonoBehaviour
     public Sprite RotateLeftToUp;
     public Sprite RotateLeftToDown;
 
-    public SnakeScript Snake { get; set; }
+    public SnakeController Snake { get; set; }
     public Direction Direction { get; set; }
     public Direction? PrevDirection { get; set; } // null if not rotated
 

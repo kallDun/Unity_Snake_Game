@@ -3,16 +3,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_Script : MonoBehaviour
+public class UI_Controller : MonoBehaviour
 {
-    public GameScript Game;
+    public GameController Game;
     public Button ContinueButton, RetryButton, SettingsButton;
     public TextMeshProUGUI LengthLabel, ScoresLabel, TimeLabel;
     public GameObject PausePanel, PropertiesPanel;
 
     void Start()
     {
-        Game.OnChangingGamemode += () =>
+        Game.ChangeGamemodeEvent += () =>
         {
             if (Game.Gamemode is GameMode.Play)
             {

@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class SpawnFruitsScript : MonoBehaviour
+public class FruitsSpawner : MonoBehaviour
 {
     public GameObject gameField;
-    public SnakeScript snake;
+    public SnakeController snake;
 
     public AudioSource audioSource;
     public AudioClip eat_sound;
@@ -22,19 +22,19 @@ public class SpawnFruitsScript : MonoBehaviour
             var spawned = Instantiate(fruit, transform);
 
             spawned.transform.position = GetRandomEmptyPosition();
-            var script = spawned.GetComponent<FruitScript>();
+            var script = spawned.GetComponent<FruitController>();
 
             int type = new System.Random().Next(0, 3);
             script.fruitType = (FruitType)type;            
 
-            float size = gameField.GetComponent<TileFieldScript>().TileSize;
+            float size = gameField.GetComponent<TileFieldSpawner>().TileSize;
             spawned.transform.localScale = new Vector3(size, size, 1);
 
             Fruits.Add(spawned);
             script.OnEating += () =>
             {
                 GameObject fr = spawned;
-                FruitScript sc = script;
+                FruitController sc = script;
                 SpawnFruits(true);
                 Fruits.Remove(fr);
                 script.Hide();
@@ -45,7 +45,7 @@ public class SpawnFruitsScript : MonoBehaviour
     }
     private Vector3 GetRandomEmptyPosition()
     {
-        var field = gameField.GetComponent<TileFieldScript>().Field;
+        var field = gameField.GetComponent<TileFieldSpawner>().Field;
         var snakePieces = snake.SnakePieces;
 
         List<Vector3> empties = new();

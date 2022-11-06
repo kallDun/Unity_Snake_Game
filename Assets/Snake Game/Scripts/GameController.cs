@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class GameScript : MonoBehaviour
+public class GameController : MonoBehaviour
 {
     // scores
     public int Scores { get; private set; }
@@ -14,24 +14,24 @@ public class GameScript : MonoBehaviour
 
     // gamemode
     public GameMode Gamemode { get; private set; }
-    public event Action OnChangingGamemode;
+    public event Action ChangeGamemodeEvent;
 
     // timer
     public float EllapsedTime { get; private set; }
 
     // length
-    public int GetSnakeLength => snake.SnakePieces.Count;
+    public int GetSnakeLength => _snake.SnakePieces.Count;
 
     // -----------------------------------
-    SnakeScript snake;
-    TileFieldScript tileField;
-    SpawnFruitsScript spawnFruits;
+    private SnakeController _snake;
+    private TileFieldSpawner _tileField;
+    private FruitsSpawner _spawnFruits;
 
     void Start()
     {
-        snake = GetComponentInChildren<SnakeScript>();
-        tileField = GetComponentInChildren<TileFieldScript>();
-        spawnFruits = GetComponentInChildren<SpawnFruitsScript>();
+        _snake = GetComponentInChildren<SnakeController>();
+        _tileField = GetComponentInChildren<TileFieldSpawner>();
+        _spawnFruits = GetComponentInChildren<FruitsSpawner>();
         GameOver();
     }
     private void Update()
@@ -44,29 +44,29 @@ public class GameScript : MonoBehaviour
 
     public void RestartGame()
     {
-        tileField.DestroyField();
-        tileField.GenerateField();
-        snake.DestroySnake();
-        snake.SpawnSnake();
-        spawnFruits.DestroyFruits();
-        spawnFruits.SpawnFruits();
+        _tileField.DestroyField();
+        _tileField.GenerateField();
+        _snake.DestroySnake();
+        _snake.SpawnSnake();
+        _spawnFruits.DestroyFruits();
+        _spawnFruits.SpawnFruits();
 
         EllapsedTime = 0;
         Scores = 0;
         Gamemode = GameMode.Play;
-        OnChangingGamemode?.Invoke();
+        ChangeGamemodeEvent?.Invoke();
     }
     public void GameOver()
     {
         Gamemode = GameMode.GameOver;
-        OnChangingGamemode?.Invoke();
+        ChangeGamemodeEvent?.Invoke();
     }
     public void Pause()
     {
         if (Gamemode == GameMode.Play)
         {
             Gamemode = GameMode.Pause;
-            OnChangingGamemode?.Invoke();
+            ChangeGamemodeEvent?.Invoke();
         }        
     }
     public void Continue()
@@ -74,7 +74,7 @@ public class GameScript : MonoBehaviour
         if (Gamemode == GameMode.Pause)
         {
             Gamemode = GameMode.Play;
-            OnChangingGamemode?.Invoke();
+            ChangeGamemodeEvent?.Invoke();
         }
     }
 
@@ -88,17 +88,21 @@ public class GameScript : MonoBehaviour
             2 => (45, 33, .13f, 14f),
             3 or _ => (60, 45, .1f, 16f)
         };
-        tileField.TileCount_Height = height;
-        tileField.TileCount_Width = width;
-        tileField.TileSize = size;
-        snake.base_speed = speed;
+        _tileField.TileCount_Height = height;
+        _tileField.TileCount_Width = width;
+        _tileField.TileSize = size;
+        _snake.BaseSpeed = speed;
     }
     public void ChangeRandomField(Toggle toggle)
     {
-        tileField.IsProcedureRandom = toggle.isOn;
+        _tileField.IsProcedureRandom = toggle.isOn;
+    }
+    public void ChangeWallTeleprotation(Toggle toggle)
+    {
+        _snake.IsTeleportatingBetweenWalls = toggle.isOn;
     }
     public void ChangeFruitsCount(TMP_Dropdown dropdown)
     {
-        spawnFruits.max_count = dropdown.value + 1;
+        _spawnFruits.max_count = dropdown.value + 1;
     }
 }

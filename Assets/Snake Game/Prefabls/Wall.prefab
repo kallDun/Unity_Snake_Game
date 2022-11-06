@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 4213670769880525661}
   - component: {fileID: 1292943588460362438}
   - component: {fileID: 5158618325088255818}
-  m_Layer: 0
+  - component: {fileID: 4765610950238366118}
+  m_Layer: 3
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,6 +82,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &4765610950238366118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189867929804150687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56d102480334d13448d8864b8771186f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7523319942842465832
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,7 +104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8233833765245164703}
   - component: {fileID: 7229073094907690225}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: sprite (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

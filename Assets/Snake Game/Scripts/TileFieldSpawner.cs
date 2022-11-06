@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileFieldScript : MonoBehaviour
+public class TileFieldSpawner : MonoBehaviour
 {
     public GameObject Center;
     public GameObject Tile, Wall;
@@ -49,25 +49,16 @@ public class TileFieldScript : MonoBehaviour
         // spawn walls
         for (int y = 0; y < TileCount_Height; y++)
         {
-            SpawnWall(Field[y][0].transform.position + new Vector3(-TileSize, 0, 0), angle: 0);
-            SpawnWall(Field[y][TileCount_Width - 1].transform.position + new Vector3(TileSize, 0, 0), angle: 180);
+            SpawnWall(Field[y][0].transform.position + new Vector3(-TileSize, 0, 0), angle: 0, Direction.Left, index: y);
+            SpawnWall(Field[y][TileCount_Width - 1].transform.position + new Vector3(TileSize, 0, 0), angle: 180, Direction.Right, index: y);
         }
         for (int x = 0; x < TileCount_Width; x++)
         {
-            SpawnWall(Field[0][x].transform.position + new Vector3(0, -TileSize, 0),  angle: 90);
-            SpawnWall(Field[TileCount_Height - 1][x].transform.position + new Vector3(0, TileSize, 0), angle: 270);
+            SpawnWall(Field[0][x].transform.position + new Vector3(0, -TileSize, 0),  angle: 90, Direction.Up, index: x);
+            SpawnWall(Field[TileCount_Height - 1][x].transform.position + new Vector3(0, TileSize, 0), angle: 270, Direction.Down, index: x);
         }
     }
-    private void SpawnWall(Vector3 position, int angle)
-    {
-        GameObject wall = Instantiate(Wall, gameObject.transform);
-        wall.transform.localScale = new Vector3(TileSize, TileSize, 1);
-        wall.transform.position = position;
-        wall.transform.rotation = Quaternion.AngleAxis(angle, new Vector3(0, 0, 1));
-        SpriteRenderer sprite = wall.GetComponentInChildren<SpriteRenderer>();
-        sprite.color = WallColor;
-        Walls.Add(wall);
-    }
+
     public void DestroyField()
     {
         if (Field is null) return;
@@ -84,5 +75,31 @@ public class TileFieldScript : MonoBehaviour
             Destroy(item);
         }
         Walls.Clear();
+    }
+
+    public Vector3 GetTeleportationLocationFromWall(Wall wall)
+    {
+        return wall.Direction switch
+        {
+            Direction.Right => Field[wall.Position][0].transform.position,
+            Direction.Left => Field[wall.Position][TileCount_Width - 1].transform.position,
+            Direction.Up => Field[TileCount_Height - 1][wall.Position].transform.position,
+            Direction.Down => Field[0][wall.Position].transform.position,
+            _ => new()
+        };
+    }
+
+    private void SpawnWall(Vector3 position, int angle, Direction direction, int index)
+    {
+        GameObject wall = Instantiate(Wall, gameObject.transform);
+        wall.transform.localScale = new Vector3(TileSize, TileSize, 1);
+        wall.transform.position = position;
+        wall.transform.rotation = Quaternion.AngleAxis(angle, new Vector3(0, 0, 1));
+        SpriteRenderer sprite = wall.GetComponentInChildren<SpriteRenderer>();
+        Wall script = wall.GetComponent<Wall>();
+        script.Direction = direction;
+        script.Position = index;
+        sprite.color = WallColor;
+        Walls.Add(wall);
     }
 }
